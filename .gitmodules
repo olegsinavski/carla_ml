@@ -1,3 +1,0 @@
-[submodule "docker_mlgl"]
-	path = docker_mlgl
-	url = https://github.com/olegsinavski/docker_mlgl

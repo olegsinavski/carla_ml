@@ -37,13 +37,17 @@ fi
 
 # docker stop ${docker_image_name}
 # docker rm ${docker_image_name}
+GPUS="device=4"
+# GPUS="all"
+
 docker run --name $docker_image_name -d -it \
-  --gpus='all,"capabilities=compute,utility,graphics,display"' \
+  --gpus="\"$GPUS\",\"capabilities=compute,utility,graphics,display\"" \
   -p 8080:8080 \
   -p 5900:5900 \
   -p 8894:8894 \
   -p 0.0.0.0:8265:8265 \
   -p 0.0.0.0:6006:6006 \
+  -e NVIDIA_VISIBLE_DEVICES=4 \
   -e AUTHORIZED_KEYS="`cat $pub_key_file`" \
   -v $src_folder:/src \
   --ipc=host \
@@ -74,4 +78,5 @@ echo "VNC is availble at <hostip>:8080/vnc.html or via VNC client on port 5900"
 
 # https://stackoverflow.com/questions/59895/how-do-i-get-the-directory-where-a-bash-script-is-located-from-within-the-script
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+echo $SCRIPT_DIR
 $SCRIPT_DIR/docker_mlgl/print_jupyter.sh $docker_image_name

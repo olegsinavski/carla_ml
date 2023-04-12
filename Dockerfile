@@ -106,20 +106,20 @@ RUN python -m pip --no-cache-dir install --no-deps -r requirements.txt.lock
 # ------------------------------------------------------------------
 EXPOSE $JUPYTER_PORT
 COPY docker_mlgl/scripts/jupyter_notebook_config.py /etc/jupyter/
-RUN echo "c.NotebookApp.port = $JUPYTER_PORT" > /etc/jupyter/jupyter_notebook_config.py
+RUN echo "c.NotebookApp.port = $JUPYTER_PORT" >> /etc/jupyter/jupyter_notebook_config.py
 
 ## ==================================================================
 ## Startup
 ## ------------------------------------------------------------------
-COPY docker_mlgl/scripts/on_docker_start.sh /on_docker_start.sh
+COPY on_docker_start.sh /on_docker_start.sh
 RUN chmod +x /on_docker_start.sh
 
 # RUN echo 'su - carla -c "./CarlaUE4.sh -RenderOffScreen -nosound -opengl"' > /home/carla/mycarla.sh
 # Unreal command line commands: https://docs.unrealengine.com/5.1/en-US/command-line-arguments-in-unreal-engine/
-RUN echo "./CarlaUE4.sh -RenderOffScreen -nosound" > /home/carla/no_screen.sh
+RUN echo "./CarlaUE4.sh -nosound -carla-server -benchmark -fps=10 -quality-level=Epic -RenderOffScreen" > /home/carla/no_screen.sh
 RUN chmod +x /home/carla/no_screen.sh
 
-RUN echo "./CarlaUE4.sh -nosound -carla-server -benchmark -fps=20 -quality-level=Epic" > /home/carla/mycarla.sh
+RUN echo "./CarlaUE4.sh -nosound -carla-server -benchmark -fps=10 -quality-level=Epic" > /home/carla/mycarla.sh
 RUN chmod +x /home/carla/mycarla.sh
 
 # make bash a default shell for carla user

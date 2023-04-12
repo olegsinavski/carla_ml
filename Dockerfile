@@ -45,7 +45,7 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/
 # ==================================================================
 # GUI
 # ------------------------------------------------------------------
-# RUN $APT_INSTALL libsm6 libxext6 libxrender-dev mesa-utils
+RUN $APT_INSTALL libsm6 libxext6 libxrender-dev mesa-utils
 
 # Setup demo environment variables
 ENV LANG=en_US.UTF-8 \
@@ -77,7 +77,10 @@ COPY docker_mlgl/scripts/on_docker_start.sh /on_docker_start.sh
 RUN chmod +x /on_docker_start.sh
 
 # RUN echo 'su - carla -c "./CarlaUE4.sh -RenderOffScreen -nosound -opengl"' > /home/carla/mycarla.sh
-RUN echo "./CarlaUE4.sh -RenderOffScreen -nosound -opengl" > /home/carla/mycarla.sh
+RUN echo "./CarlaUE4.sh -RenderOffScreen -nosound -opengl" > /home/carla/no_screen.sh
+RUN chmod +x /home/carla/no_screen.sh
+
+RUN echo "./CarlaUE4.sh -nosound -opengl" > /home/carla/mycarla.sh
 RUN chmod +x /home/carla/mycarla.sh
 
 # make bash a default shell for carla user
@@ -85,5 +88,7 @@ RUN usermod -s /bin/bash carla
 
 #USER carla
 #WORKDIR /home/carla
+
+RUN apt-get update && $APT_INSTALL mesa-vulkan-drivers vulkan-utils xdg-user-dirs xdg-utils
 
 ENTRYPOINT ["/on_docker_start.sh"]

@@ -45,7 +45,6 @@ docker run --name $docker_image_name -d -it \
   -p 0.0.0.0:8265:8265 \
   -p 0.0.0.0:6006:6006 \
   -e AUTHORIZED_KEYS="`cat $pub_key_file`" \
-  -e NVIDIA_VISIBLE_DEVICES=4 \
   -v $src_folder:/src \
   --ipc=host \
   -v ~/.${docker_image_name}_home:/root \
@@ -74,5 +73,5 @@ echo "SSH with 'ssh carla@$SANDBOX_IP'"
 echo "VNC is availble at <hostip>:8080/vnc.html or via VNC client on port 5900"
 
 # https://stackoverflow.com/questions/59895/how-do-i-get-the-directory-where-a-bash-script-is-located-from-within-the-script
-# SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-# $SCRIPT_DIR/print_jupyter.sh $docker_image_name
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+$SCRIPT_DIR/docker_mlgl/print_jupyter.sh $docker_image_name

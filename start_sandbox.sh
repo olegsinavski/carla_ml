@@ -37,6 +37,19 @@ fi
 
 # docker stop ${docker_image_name}
 # docker rm ${docker_image_name}
+#docker run --name $docker_image_name -d -it \
+#  --gpus all \
+#  -p 8080:8080 \
+#  -p 5900:5900 \
+#  -p 8894:8894 \
+#  -p 0.0.0.0:8265:8265 \
+#  -p 0.0.0.0:6006:6006 \
+#  -e AUTHORIZED_KEYS="`cat $pub_key_file`" \
+#  -v $src_folder:/src \
+#  --ipc=host \
+#  -v ~/.${docker_image_name}_home:/root \
+#  ${docker_image_name} bash
+
 docker run --name $docker_image_name -d -it \
   --gpus all \
   -p 8080:8080 \
@@ -47,7 +60,6 @@ docker run --name $docker_image_name -d -it \
   -e AUTHORIZED_KEYS="`cat $pub_key_file`" \
   -v $src_folder:/src \
   --ipc=host \
-  -v ~/.${docker_image_name}_home:/root \
   ${docker_image_name} bash
 
 # wait a bit and check if container is up
@@ -69,6 +81,7 @@ ssh-keygen -f "$HOME/.ssh/known_hosts" -R $SANDBOX_IP
 
 echo "Successfully started the sandbox!"
 echo "SSH with 'ssh root@$SANDBOX_IP'"
+echo "SSH with 'ssh carla@$SANDBOX_IP'"
 echo "VNC is availble at <hostip>:8080/vnc.html or via VNC client on port 5900"
 
 # https://stackoverflow.com/questions/59895/how-do-i-get-the-directory-where-a-bash-script-is-located-from-within-the-script

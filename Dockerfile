@@ -1,7 +1,51 @@
-FROM mlgl_sandbox
+FROM carlasim/carla:0.9.14
 
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1AF1527DE64CB8D9  && \
-    add-apt-repository "deb [arch=amd64] http://dist.carla.org/carla $(lsb_release -sc) main" && \
-    apt-get update && \
-    APT_INSTALL="apt-get install -y --no-install-recommends" && \
-    $APT_INSTALL carla-simulator=0.9.13
+USER root
+ENV DEBIAN_FRONTEND noninteractive
+ENV APT_INSTALL "apt-get install -y --no-install-recommends"
+
+# ==================================================================
+# SSH
+# ------------------------------------------------------------------
+RUN apt-get update && $APT_INSTALL openssh-server
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+
+# ==================================================================
+# GUI
+# ------------------------------------------------------------------
+# RUN $APT_INSTALL libsm6 libxext6 libxrender-dev mesa-utils
+
+# Setup demo environment variables
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    DISPLAY=:0.0 \
+    DISPLAY_WIDTH=1024 \
+    DISPLAY_HEIGHT=768
+
+RUN apt-get update; \
+    $APT_INSTALL \
+      fluxbox \
+      net-tools \
+      novnc \
+      supervisor \
+      x11vnc \
+      xterm \
+      xvfb \
+      python3-tk \
+      libgtk2.0-dev
+
+COPY docker_mlgl/dep/vnc /vnc
+EXPOSE $VNC_PORT
+
+
+## ==================================================================
+## Startup
+## ------------------------------------------------------------------
+COPY docker_mlgl/scripts/on_docker_start.sh /on_docker_start.sh
+RUN chmod +x /on_docker_start.sh
+
+USER carla
+
+ENTRYPOINT ["/on_docker_start.sh"]

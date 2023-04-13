@@ -1,4 +1,4 @@
-FROM carlasim/carla:0.9.14
+FROM carlasim/carla:0.9.11
 ARG VNC_PORT=8080
 ARG JUPYTER_PORT=8894
 

@@ -1,4 +1,4 @@
-FROM carlasim/carla:0.9.11
+FROM carlasim/carla:0.9.14
 ARG VNC_PORT=8080
 ARG JUPYTER_PORT=8894
 
@@ -122,15 +122,12 @@ RUN chmod +x /home/carla/no_screen.sh
 RUN echo "./CarlaUE4.sh -nosound -carla-server -benchmark -fps=10 -quality-level=Epic" > /home/carla/mycarla.sh
 RUN chmod +x /home/carla/mycarla.sh
 
+RUN echo "python /home/carla/PythonAPI/examples/generate_traffic.py &" > /home/carla/manual_control.sh
+RUN echo "python /home/carla/PythonAPI/examples/manual_control.py" >> /home/carla/manual_control.sh
+RUN chmod +x /home/carla/manual_control.sh
+
 # make bash a default shell for carla user
 RUN usermod -s /bin/bash carla
-
-#USER carla
-#WORKDIR /home/carla
-
-
-# check that drawing works
-# RUN $APT_INSTALL tuxpaint
 
 
 ENTRYPOINT ["/on_docker_start.sh"]

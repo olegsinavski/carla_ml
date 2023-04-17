@@ -47,7 +47,6 @@ docker run --name $docker_image_name -d -it \
   -p 8894:8894 \
   -p 0.0.0.0:8265:8265 \
   -p 0.0.0.0:6006:6006 \
-  -e NVIDIA_VISIBLE_DEVICES=4 \
   -e AUTHORIZED_KEYS="`cat $pub_key_file`" \
   -v $src_folder:/src \
   --ipc=host \
@@ -62,9 +61,6 @@ if [ -z "$container_id" ]; then
     docker logs ${docker_image_name}
     exit 1
 fi
-
-#docker exec -it ${docker_image_name} /bin/bash
-#exit 0
 
 SANDBOX_IP="$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' $docker_image_name)"
 

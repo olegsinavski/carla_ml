@@ -126,6 +126,9 @@ RUN echo "python /home/carla/PythonAPI/examples/generate_traffic.py &" > /home/c
 RUN echo "python /home/carla/PythonAPI/examples/manual_control.py" >> /home/carla/manual_control.sh
 RUN chmod +x /home/carla/manual_control.sh
 
+RUN echo "python /home/carla/PythonAPI/util/performance_benchmark.py --sensors 4 --maps Town03 --weather 0 --sync --ticks 100" > /home/carla/performance_benchmark.sh
+RUN chmod +x /home/carla/performance_benchmark.sh
+
 # make bash a default shell for carla user
 RUN usermod -s /bin/bash carla
 

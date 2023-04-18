@@ -37,7 +37,7 @@ fi
 
 # docker stop ${docker_image_name}
 # docker rm ${docker_image_name}
-GPUS="device=4"
+GPUS="device=4,5"
 # GPUS="all"
 
 docker run --name $docker_image_name -d -it \

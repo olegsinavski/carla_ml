@@ -5,3 +5,7 @@ pygame
 open3d
 Pillow
 carla==0.9.14
+python-tr
+py-cpuinfo
+gpuinfo
+psutil

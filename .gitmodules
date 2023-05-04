@@ -1,0 +1,3 @@
+[submodule "docker_mlgl"]
+	path = docker_mlgl
+	url = git@github.com:olegsinavski/docker_mlgl.git
